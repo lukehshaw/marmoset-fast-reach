@@ -7,7 +7,7 @@ function pursuit_model_compare_fpm()
 % Population range vector derivative corrlation to range vector using reaching data and pure pursuit and proportional navigation
 % simulations (3G). Target-congruent hand lateral velocity population average for reaches for reaching data and simulations.
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

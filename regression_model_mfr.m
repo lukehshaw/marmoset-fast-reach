@@ -14,7 +14,7 @@ function regression_model_mfr(model,res,output)
 %               3 = low resolution
 %   output  String name for saved workspace for later plotting
 %
-% Eg. regression_model_pred_delay_fpm(model,3,'marmo_AIC_jack');
+% Eg. regression_model_mfr(model,3,'marmo_AIC_jack.mat');
 %
 % This function performs multivariate linear regression modeling according
 % to the equation in Figure 4C and outputs AIC difference.

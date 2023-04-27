@@ -1,15 +1,20 @@
-function pursuit_model_pred_delay_mfr(model)
+function pursuit_model_pred_delay_mfr(model,preloadfile)
 
 % Generates Figure 3I, Figure 4F from
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % inputs:
 %   model = model struct of hand and cricket position from marmo_reach_model.mat
+%   preloadfile = string matlab file of fitted model simulations at delays. The
+%       script will first search for this file. If not found, it will perform a
+%       lengthy fitting procedure. 
+%       Leave blank to default use 'ReachSimPredDelay.mat'
 %
 % This script compares pure pursuit, proportional navigation, and a mixed
 % pursuit simulation performance at different visuomotor delays. Furthermore,
 % the mixed pursuit simulation is compared to a predictive pursuit
-% simulation.
+% simulation. If the function does not find the preload file (see line 25),
+% then it will perform fitting and save the fits, which takes a long time.
 % 
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
@@ -21,8 +26,11 @@ function pursuit_model_pred_delay_mfr(model)
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
 %%
+if nargin == 1
+  preloadfile = 'ReachSimPredDelay.mat';
+end
 
-PreloadFile = 'ReachSimPredDelay.mat';
+PreloadFile = preloadfile;
 
 if ~exist(PreloadFile)
     
@@ -527,9 +535,11 @@ if (1)
       plot(xtime,uPN2,'k-','LineWidth',2,'Color',PN2colo);
       text(80,0.975,'Mixed PP + PN','Fontsize',14,'Color',PN2colo);
     end
+     text(80,0.99,'Proportional Nav','Fontsize',14,'Color',PNcolo);
+     text(80,1.005,'Pure Pursuit','Fontsize',14,'Color',PPcolo);
     plot([DTAU,DTAU],[0.78,0.95],'k:');  % show 80 ms delay
     xlabel('Visuomotor Delay (ms)');
-    ylabel('Goodness of Fit');
+    ylabel('Goodness of Fit (R^2)');
     set(gca,'Fontsize',14);
     axis([4 160 0.78 1.02]);
  end

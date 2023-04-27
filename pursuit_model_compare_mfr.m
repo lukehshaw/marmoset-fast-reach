@@ -6,8 +6,9 @@ function pursuit_model_compare_mfr(model)
 % inputs:
 %   model = model struct of hand and cricket position from marmo_reach_model.mat
 %
+% N and K pursuit constant fitting for pursuit models (see Brighton and Taylor 2019). 
 % Population range vector derivative corrlation to range vector using reaching data and pure pursuit and proportional navigation
-% simulations (3G). Target-congruent hand lateral velocity population average for reaches for reaching data and simulations.
+% simulations (3G). Target-velocity-congruent hand lateral velocity population average for reaching data and simulations.
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
 % MATLAB R2022b
 %
@@ -21,7 +22,6 @@ function pursuit_model_compare_mfr(model)
 
 %%
 
-load marmo_reach_model.mat
 nReach = size(model.x.cricket,2);
 vecCorA = cell(nReach,1);
 diffvecCorA = cell(nReach,1);
@@ -381,7 +381,6 @@ for k = 1:size(zbestSims,1)
     end        
 end
 [0, nanmean( zbestSims )]
-input('see all');
 
 %% plot final results
 %******* summary stats on reaching movements (Luke's original code)
@@ -460,7 +459,7 @@ su = nanstd(vcA) ./ sqrt(normo);
 aa = [xx fliplr(xx)];
 bb = [(uu-su) fliplr(uu+su)];
 fill(aa,bb,[1,0,1],'FaceAlpha',0.2,'Linestyle','none'); hold on;
-plot(xx,uu,'k-','linewidth',4,'Color',[0.8,0,0.8]);
+HAND=plot(xx,uu,'k-','linewidth',4,'Color',[0.8,0,0.8]);
 
 if (1)
   xx = (-vcSize2+1:0)/.240;
@@ -470,7 +469,7 @@ if (1)
   aa = [xx fliplr(xx)];
   bb = [(uu2-su2) fliplr(uu2+su2)];
   %fill(aa,bb,[1,0,0],'FaceAlpha',0.2,'Linestyle','none');
-  plot(xx,uu2,'k--','linewidth',2,'Color',[0,0,0]);
+  PURE=plot(xx,uu2,'k--','linewidth',2,'Color',[0,0,0]);
 
   xx = (-vcSize2+1:0)/.240;
   uu2 = nanmean(diffvcB);
@@ -479,35 +478,16 @@ if (1)
   aa = [xx fliplr(xx)];
   bb = [(uu2-su2) fliplr(uu2+su2)];
   %fill(aa,bb,[1,0,0],'FaceAlpha',0.2,'Linestyle','none');
-  plot(xx,uu2,'k--','linewidth',2,'Color',[0,0,1]);
+  PROP=plot(xx,uu2,'k--','linewidth',2,'Color',[0,0,1]);
 end
-        
+legend([HAND PROP PURE],{'hand','prop nav','pure pursuit'})        
 ylim([-1 0])
 xlim([-220 0])
 set(gca,'TickLength',[0 0])
-title('PP Real Time Series');
+title('Range Vector / Range Vector Derivative Correlation');
 ylabel('Correlation');
 xlabel('ms')
 
-%********* new figure to plot correlations with models
-figure;
-colo = [[0,0,0];[0,0,1];[0.6,0.6,0]];
-for kk = 1:3
-  xx = (-velSize(kk)+1:0)/.240;
-  uu2 = nanmean(velvcA{kk});
-  normo2 = sum(~isnan(velvcA{kk}));
-  su2 = nanstd(velvcA{kk}) ./ sqrt(normo2);
-  aa = [xx fliplr(xx)];
-  bb = [(uu2-su2) fliplr(uu2+su2)];
-  fill(aa,bb,colo(kk,:),'FaceAlpha',0.2,'Linestyle','none'); hold on;
-  plot(xx,uu2,'k--','linewidth',2,'Color',colo(kk,:));
-end        
-ylim([0.5 1])
-xlim([-220 0])
-set(gca,'TickLength',[0 0])
-title('Time Series with Models');
-ylabel('Correlation');
-xlabel('ms')
 
 %******* plot the mean velocities (direct and lateral) over reaches
 figure;
@@ -518,14 +498,14 @@ suc = nanstd(vcAC,1) ./ sqrt( sum(~isnan(vcAC)) );
 aa = [xx fliplr(xx)];
 bb = [(uuc+suc) fliplr(uuc-suc)];
 fill(aa,bb,[1,0.5,0.5],'FaceAlpha',0.3,'Linestyle','none');
-plot(xx,uuc,'r-','Color',[1,0.5,0.5],'linewidth',2); hold on
+CRICK=plot(xx,uuc,'r-','Color',[1,0.5,0.5],'linewidth',2); hold on
 %****
 uuh = nanmean(vcAH,1);
 suh = nanstd(vcAH,1) ./ sqrt( sum(~isnan(vcAH)) );
 aa = [xx fliplr(xx)];
 bb = [(uuh+suh) fliplr(uuh-suh)];
 fill(aa,bb,[0,0.6,0.6],'FaceAlpha',0.3,'Linestyle','none');
-plot(xx,uuh,'b-','Color',[0,0.6,0.6],'linewidth',2);
+HAND=plot(xx,uuh,'b-','Color',[0,0.6,0.6],'linewidth',2);
 
 if (1)
 %***** hand lateral speed for PP and PN models
@@ -534,23 +514,24 @@ if (1)
   aa = [xx fliplr(xx)];
   bb = [(PPuuh+PPsuh) fliplr(PPuuh-PPsuh)];
   % fill(aa,bb,[0,0,0],'FaceAlpha',0.3,'Linestyle','none');
-  plot(xx,PPuuh,'b--','Color',[0,0,0],'linewidth',2);
+  PURE=plot(xx,PPuuh,'b--','Color',[0,0,0],'linewidth',2);
   %***** hand lateral speed for PP model
   PNuuh = nanmean(PNvcAH,1);
   PNsuh = nanstd(PNvcAH,1) ./ sqrt( sum(~isnan(PNvcAH)) );
   aa = [xx fliplr(xx)];
   bb = [(PNuuh+PNsuh) fliplr(PNuuh-PNsuh)];
   % fill(aa,bb,[0,0,1],'FaceAlpha',0.3,'Linestyle','none');
-  plot(xx,PNuuh,'b--','Color',[0,0,1],'linewidth',2);
+  PROP=plot(xx,PNuuh,'b--','Color',[0,0,1],'linewidth',2);
 end
 
 %********
+legend([CRICK HAND PROP PURE],{'cricket','hand','prop nav','pure pursuit'})
 xlim([-220 0])
 ylim([-5 15])
 set(gca,'TickLength',[0 0])
-title('Mean Velos Real Time Series');
-ylabel('cm/s');
-xlabel('ms')
+title('Mean Congruent Lateral Velocity');
+ylabel(' Lateral Vecity in same direction as Cricket Velocity cm/s');
+xlabel('ms from reach end')
 
 return;
 

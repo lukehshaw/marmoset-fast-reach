@@ -13,7 +13,7 @@ function pursuit_model_pred_delay_fpm()
 % https://doi.org/10.5281/zenodo.7869286
 %
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Pursuit simulation scripts modified from:
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.

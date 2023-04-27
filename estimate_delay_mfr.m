@@ -1,7 +1,7 @@
 function estimate_delay_fpm(model,nSEM,nJack)
 
 % Generates Figure 4A, 4B from  
-% Shaw,L, Wang KH, Mitchell, J (2024) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+% Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 
 % inputs:  
 %   model   Reaching data structure marmo_reach_model.mat available at

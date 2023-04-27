@@ -1,10 +1,10 @@
-function plot_normalized_velocity_fpm(model,nq,tord)
+function plot_normalized_velocity_mfr(model,nq,tord)
 
 % Generates Figure 3C from  
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % inputs:
-%   model = model struct of hand and cricket position
+%   model = model struct of hand and cricket position from marmo_reach_model.mat
 %   nq = number of interpoation points
 %   tord==1:time interpolation tord==2:distance interpolation 
 %

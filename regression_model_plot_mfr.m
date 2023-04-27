@@ -1,5 +1,6 @@
 % Generates Figure 4E plot from multivariate regression analysis.
-% Run regression_model_fpm.m prior to running this.
+%
+% Run regression_model_mfr.m prior to running this.
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % This function performs multivariate linear regression modeling according

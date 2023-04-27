@@ -1,8 +1,10 @@
-
-function pursuit_model_pred_delay_fpm()
+function pursuit_model_pred_delay_mfr(model)
 
 % Generates Figure 3I, Figure 4F from
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+%
+% inputs:
+%   model = model struct of hand and cricket position from marmo_reach_model.mat
 %
 % This script compares pure pursuit, proportional navigation, and a mixed
 % pursuit simulation performance at different visuomotor delays. Furthermore,
@@ -28,8 +30,6 @@ if ~exist(PreloadFile)
   MarkTau = 17;
   shouldVis = 0; %1=yea vis 0=no vis
 
-  
-  load marmo_reach_model.mat
   nReach = size(model.x.cricket,2);
   vecCorA = cell(nReach,1);
   diffvecCorA = cell(nReach,1);

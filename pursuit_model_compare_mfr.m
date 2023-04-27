@@ -1,8 +1,10 @@
-
-function pursuit_model_compare_fpm()
+function pursuit_model_compare_mfr(model)
 
 % Generates Figure 3G, Figure 3H from  
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+%
+% inputs:
+%   model = model struct of hand and cricket position from marmo_reach_model.mat
 %
 % Population range vector derivative corrlation to range vector using reaching data and pure pursuit and proportional navigation
 % simulations (3G). Target-congruent hand lateral velocity population average for reaches for reaching data and simulations.

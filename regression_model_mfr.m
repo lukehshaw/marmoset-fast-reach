@@ -3,7 +3,7 @@ function regression_model_fpm(model,res,output)
 % Generates data to plot Figure 4E using the equation in Figure 4C.
 % Saves output variables required for plotting as 'output' workspace
 % Plot script is regression_model_plot_fpm.m
-% Shaw,L, Wang KH, Mitchell, J (2024) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+% Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 
 % inputs:  
 %   model   Reaching data structure marmo_reach_model.mat available at

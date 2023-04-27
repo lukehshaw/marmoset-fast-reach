@@ -2,7 +2,7 @@
 function pursuit_model_pred_delay_fpm()
 
 % Generates Figure 3I, Figure 4F from
-% Shaw,L, Wang KH, Mitchell, J (2024) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+% Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % This script compares pure pursuit, proportional navigation, and a mixed
 % pursuit simulation performance at different visuomotor delays. Furthermore,

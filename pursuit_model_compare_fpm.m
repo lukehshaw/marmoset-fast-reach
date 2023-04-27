@@ -6,7 +6,8 @@ function pursuit_model_compare_fpm()
 %
 % Population range vector derivative corrlation to range vector using reaching data and pure pursuit and proportional navigation
 % simulations (3G). Target-congruent hand lateral velocity population average for reaches for reaching data and simulations.
-% Jude Mitchell and Luke Shaw 4/2024
+% Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
+% Matlab R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
@@ -14,9 +15,7 @@ function pursuit_model_compare_fpm()
 % Mischiati, M., et al. (2015). "Internal models direct dragonfly interception steering." Nature 517(7534): 333-338.
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
-
-clearvars;
-close all;
+%%
 
 load marmo_reach_model.mat
 nReach = size(model.x.cricket,2);

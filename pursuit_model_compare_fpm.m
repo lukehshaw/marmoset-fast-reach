@@ -12,7 +12,9 @@ function pursuit_model_compare_fpm()
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
 %
+% Range vector derivative correlation analysis modified from:
 % Mischiati, M., et al. (2015). "Internal models direct dragonfly interception steering." Nature 517(7534): 333-338.
+% Pursuit simulation scripts modified from:
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
 %%

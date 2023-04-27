@@ -15,7 +15,8 @@ function estimate_delay_fpm(model,nSEM,nJack)
 % lateral hand velocity locked to those events. The second is a simple
 % linear regression model with a delay term. See Star Methods of above
 % research publication.
-% Jude Mitchell and Luke Shaw 4/2023
+% Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
+% Matlab R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

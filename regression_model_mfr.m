@@ -19,7 +19,7 @@ function regression_model_fpm(model,res,output)
 % This function performs multivariate linear regression modeling according
 % to the equation in Figure 4C and outputs AIC difference.
 % Jude Mitchell, Kuan Hong Wang, and Luke Shaw 4/2023
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

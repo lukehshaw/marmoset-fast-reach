@@ -16,7 +16,7 @@ function estimate_delay_fpm(model,nSEM,nJack)
 % linear regression model with a delay term. See Star Methods of above
 % research publication.
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

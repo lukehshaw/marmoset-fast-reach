@@ -1,11 +1,20 @@
 function plot_normalized_velocity_fpm(model,nq,tord)
-%**  population average velocity plot of lateral and direct velocities
-%**  for the hand and the cricket
+
+% Generates Figure 3C from  
+% Shaw,L, Wang KH, Mitchell, J (2024) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
-%**  inputs:
-%**  model = model struct of hand and cricket position
-%**  nq = number of interpoation points
-%**  tord==1:time interpolation tord==2:distance interpolation 
+% inputs:
+%   model = model struct of hand and cricket position
+%   nq = number of interpoation points
+%   tord==1:time interpolation tord==2:distance interpolation 
+%
+% Interpolated population average lateral and direct velocity components 
+% of hands and crickets during reaches.
+% Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2024
+% Matlab R2022b
+%
+% Reaching data structure marmo_reach_model.mat available at
+% https://doi.org/10.5281/zenodo.7869286
 
 %% define smoothing window
 nTrial=size(model.x.hand,2);

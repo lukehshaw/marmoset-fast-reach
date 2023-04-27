@@ -1,11 +1,11 @@
 % Generates Figure 4E plot from multivariate regression analysis.
 % Run regression_model_fpm.m prior to running this.
-% Shaw,L, Wang KH, Mitchell, J (2024) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
+% Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % This function performs multivariate linear regression modeling according
 % to the equation in Figure 4C and outputs AIC difference.
 % Jude Mitchell, Kuan Hong Wang, and Luke Shaw 4/2023
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

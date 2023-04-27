@@ -11,7 +11,7 @@ function plot_normalized_velocity_fpm(model,nq,tord)
 % Interpolated population average lateral and direct velocity components 
 % of hands and crickets during reaches.
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2024
-% Matlab R2022b
+% MATLAB R2022b
 %
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286

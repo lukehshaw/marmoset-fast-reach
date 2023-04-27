@@ -12,9 +12,10 @@ function pursuit_model_pred_delay_fpm()
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
 %
-% Jude Mitchell and Luke Shaw 4/2023
+% Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
 % Matlab R2022b
 %
+% Pursuit simulation scripts modified from:
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
 %%

@@ -1,14 +1,7 @@
-function estimate_delay_mfr(model,nSEM,nJack)
+function estimate_delay_mfr()
 
 % Generates Figure 4A, 4B from  
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
-
-% inputs:  
-%   model   Reaching data structure marmo_reach_model.mat available at
-%               https://doi.org/10.5281/zenodo.7869286
-%   nSEM    SEM multiplier for plotting
-%   nJack   number of jack knifes to perform on STA if 0 then confidence
-%               bounds of regress function implemented
 %
 % This function estimates visumotor delay in marmoset reaches using two methods. 
 % The first uses a filter that finds jumps in cricket velocity and calculates 
@@ -21,8 +14,10 @@ function estimate_delay_mfr(model,nSEM,nJack)
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
 
-%% 
+%% import model data
+load('marmo_reach_model.mat','model');
 
+%% 
 LT = length(model.x.hand);
 OFPS = 240;  % frames per sec of video
 FPS = 240;  % resample data to reduce auto-correlations
@@ -31,6 +26,8 @@ MinT = 400; % in ms, min +/- lags
 SGO = 3;
 stype = 'sgolay';
 %**** Use -25 to 150 as range in all plots
+nSEM = 1; %number of SEMs for plotting
+nJack = 8; % number of jack knife iterations
 BigLag = floor((150+6.25)*FPS/1000);  % must be even, at 40hz this is 200 ms
 AntLag = -floor((25+6.25)*FPS/1000); % provide some negative times (check correlation)
 BMD = 3; % subsample BigX for STA before computation 
@@ -401,39 +398,6 @@ end
        hvtbo = medofilt(VelTraces{1,2},MD);  % positive hand velocity increase only traces
        xx = (-FPWINA:FPWINB)*(1000/FPS);
        LN = size(cvtbo,1); 
-       if (0)
-           %***** three plots, raw velocity traces (smoothed) % positive only
-           %*****              mean traces (negative reflected)
-           %*****              sta from linear fit
-           subplot('Position',[0.2 0.74 0.7 0.22]);
-           rr = randperm(LN);
-           subN = floor(1.0*LN);
-           for kp = 1:subN
-              rkp = rr(kp);
-              plot(xx,cvtbo(rkp,:),'k-','Color',[0.7,0.7,0.7]); hold on;
-              plot(xx,hvtbo(rkp,:),'k-','Color',[1.0,0.5,0.5]); hold on;
-           end
-           uc = nanmedian(cvtbo);
-           uh = nanmedian(hvtbo);
-           plot(xx,uc,'k-','LineWidth',2); hold on;
-           plot(xx,uh,'r-','LineWidth',2); hold on;
-           %**
-           xlabel('Time (ms)');
-           ylabel('Lateral Velocity (mm/s)');
-           axis tight;
-           V = axis;
-           maxo = max(abs(V(3)),abs(V(4)));
-           axis([V(1) V(2) -(maxo/2) maxo]);
-           plot([V(1),V(2)],[0,0],'k-');
-           plot([0,0],[-maxo,maxo],'k-');
-           set(gca,'Xtick',[-50:50:150]);
-           set(gca,'Ytick',[-20:20:40]);
-           set(gca,'Fontsize',14);
-           title('Positive Velocity Jumps');
-           text(100,-0.35*maxo,sprintf('N=%d',LN),'Fontsize',14);
-           text(-50,0.875*maxo,'Cricket','Fontsize',14,'Color',[0,0,0]);
-           text(-50,0.700*maxo,'Hand','Fontsize',14,'Color',[1,0,0]);
-       end
        
        %***************************************
        %************ then show average with negative reflected
@@ -467,7 +431,7 @@ end
        set(gca,'Xtick',[-50:50:150]);
        set(gca,'Ytick',[-10:10:20]);
        set(gca,'Fontsize',14);
-       title('Velocity Jumps (Negative Reflected)');
+       title('Fig 4A: Time Locked Cricket Velocity Jumps');
        LN = size(cvtbo,1);
        text(100,-0.2*maxo,sprintf('N=%d',LN),'Fontsize',14);
        text(100,-0.35*maxo,[num2str(nSEM) ' SEM'],'Fontsize',14);
@@ -517,7 +481,7 @@ end
        plot([0,0],[-0.25,0.45],'k-');
        xlabel('Time Lag (ms)');
        ylabel('Linear Coefficient');
-       title('Prediction of hand from cricket velocity');
+       title('Fig 4B: Prediction of hand from cricket velocity');
        set(gca,'Xtick',[0:50:150]);
        set(gca,'Ytick',[-0.20:0.20:0.40]);
        set(gca,'Fontsize',14);

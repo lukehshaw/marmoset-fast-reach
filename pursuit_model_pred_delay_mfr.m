@@ -1,10 +1,9 @@
-function pursuit_model_pred_delay_mfr(model,preloadfile)
+function pursuit_model_pred_delay_mfr(preloadfile)
 
 % Generates Figure 3I, Figure 4F from
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
 % inputs:
-%   model = model struct of hand and cricket position from marmo_reach_model.mat
 %   preloadfile = string matlab file of fitted model simulations at delays. The
 %       script will first search for this file. If not found, it will perform a
 %       lengthy fitting procedure. 
@@ -26,10 +25,14 @@ function pursuit_model_pred_delay_mfr(model,preloadfile)
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
 %%
-if nargin == 1
-  preloadfile = 'ReachSimPredDelay.mat';
+if nargin == 0
+  preloadfile = 'reachsim_pred_delay.mat';
 end
 
+%% import model data
+load('marmo_reach_model.mat','model');
+
+%%
 PreloadFile = preloadfile;
 
 if ~exist(PreloadFile)
@@ -542,6 +545,7 @@ if (1)
     ylabel('Goodness of Fit (R^2)');
     set(gca,'Fontsize',14);
     axis([4 160 0.78 1.02]);
+    title('Figure 3I: pursuit simulation fit over delay')
  end
 
 %*** make final sub-panel to Figure 3, break-down by visuo-motor delay
@@ -640,7 +644,7 @@ if (1)
        (sum( bestPN2(zz,1) .* bestPN2(zz,2))/sum(bestPN2(zz,2)))]
       psign
       pttest
-      title(sprintf('Signtest(p=%6.4f)  t-test(p=%6.4f)',psign,pttest),'Fontsize',12);
+      title(sprintf('Fig 4F: Signtest(p=%6.4f)  t-test(p=%6.4f)',psign,pttest),'Fontsize',12);
     end
  end
 

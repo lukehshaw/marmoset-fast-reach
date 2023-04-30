@@ -1,12 +1,7 @@
-function plot_normalized_velocity_mfr(model,nq,tord)
+function plot_normalized_velocity_mfr()
 
 % Generates Figure 3C from  
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
-%
-% inputs:
-%   model = model struct of hand and cricket position from marmo_reach_model.mat
-%   nq = number of interpoation points
-%   tord==1:time interpolation tord==2:distance interpolation 
 %
 % Interpolated population average lateral and direct velocity components 
 % of hands and crickets during reaches.
@@ -16,6 +11,9 @@ function plot_normalized_velocity_mfr(model,nq,tord)
 % Reaching data structure marmo_reach_model.mat available at
 % https://doi.org/10.5281/zenodo.7869286
 
+%% import model data
+load('marmo_reach_model.mat','model');
+
 %% define smoothing window
 nTrial=size(model.x.hand,2);
 sWc = 5; %smoothing window
@@ -23,6 +21,8 @@ sWh = 5;
 
 % define some other parameters
 q=1; %max hand/cricket offset val - set to 1 for no offset
+nq=30; %number of interpolation points
+tord=1; %sets time interpolation - use 2 for distance interpolation
 for i = 1:nTrial
     Ph = [model.x.hand{i}, model.y.hand{i}];
     Pc = [model.x.cricket{i}, model.y.cricket{i}];
@@ -137,7 +137,7 @@ N=size(VHoa,2);
 figure
 
 hold on
-sgtitle([tordname ' Interp: Hand and Cricket Speed']);
+sgtitle(['Fig 3C: ' tordname ' Interp: Hand and Cricket Speed']);
 xp=(1:nq)';
 mP = nanmean(abs(VHoa),2)*240;
 sP = nanstd(abs(VHoa)*240,[],2)/sqrt(N);%./sqrt(sum(~isnan(abs(VHoa)*240),2));

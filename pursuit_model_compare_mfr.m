@@ -1,14 +1,11 @@
-function pursuit_model_compare_mfr(model)
+function pursuit_model_compare_mfr()
 
 % Generates Figure 3G, Figure 3H from  
 % Shaw,L, Wang KH, Mitchell, J (2023) Fast Prediction in Marmoset Reach-to-Grasp Movements for Dynamic Prey.
 %
-% inputs:
-%   model = model struct of hand and cricket position from marmo_reach_model.mat
-%
 % N and K pursuit constant fitting for pursuit models (see Brighton and Taylor 2019). 
 % Population range vector derivative corrlation to range vector using reaching data and pure pursuit and proportional navigation
-% simulations (3G). Target-velocity-congruent hand lateral velocity population average for reaching data and simulations.
+% simulations (3G). Target-velocity-congruent hand lateral velocity population average for reaching data and simulations (3H).
 % Luke Shaw, Kuan Hong Wang, and Jude Mitchell 4/2023
 % MATLAB R2022b
 %
@@ -20,8 +17,10 @@ function pursuit_model_compare_mfr(model)
 % Pursuit simulation scripts modified from:
 % Brighton, C. H. and G. K. Taylor (2019). "Hawks steer attacks using a guidance system tuned for close pursuit of erratically manoeuvring targets." Nat Commun 10(1): 2462.
 
-%%
+%% import model data
+load('marmo_reach_model.mat','model');
 
+%%
 nReach = size(model.x.cricket,2);
 vecCorA = cell(nReach,1);
 diffvecCorA = cell(nReach,1);
@@ -71,7 +70,6 @@ Gmax = 50;
 Gn = 20;
 GSAMP = exp( log(Gmin):((log(Gmax)-log(Gmin))/Gn):log(Gmax) );
 for gain = GSAMP % Brighton + Taylor, K or N term
-    disp(['Stepping ',num2str(gain)]);  
     if (1) % used to be loop over Tau
          % disp(['Tau: ',num2str(tau)]);    
          %********************        
@@ -136,7 +134,6 @@ bestPF_K = NaN;
 bestPF_N = NaN;
 %******
 for K = GSAMP % max 200 ms into future
-   disp(['Stepping K ',num2str(K)]);  
    for N = GSAMP 
          %********************        
          PFsum = 0;
@@ -355,9 +352,6 @@ for i = 1:nReach % number of reaches
         end
 end
 
-bestSims
-nanmean(bestSims)
-nanstd(bestSims)/sqrt(sum(~isnan(bestSims(:,1))))
 zbestSims = bestSims(:,2:end);
 %*********
 zz = find(~isnan(bestSims(:,1)));
@@ -366,8 +360,8 @@ p2 = signrank(bestSims(zz,2),bestSims(zz,3));  % PN vs PNP model
 p3 = signrank(bestSims(zz,2),bestSims(zz,4));  % PN vs PNP model
 
 %*** parameters ********
-disp('Sign rank test (PP vs PN), (PN vs PNP), (PN vs PNdelay) based on trial by trial R2');
-[p1,p2,p3]
+%disp('Sign rank test (PP vs PN), (PN vs PNP), (PN vs PNdelay) based on trial by trial R2');
+%[p1,p2,p3]
 disp(sprintf('M(R2,gain,tau) PP(%3.2f,%d) PN(%3.2f,%d)',...
               bestPP_gain,1,bestPN_gain,1));
 disp(sprintf('               PF(%3.2f,%3.2f,%d) PND(%3.2f,%d)',...
@@ -380,7 +374,6 @@ for k = 1:size(zbestSims,1)
                                 (zbestSims(k,kk) + bestSims(k,1));
     end        
 end
-[0, nanmean( zbestSims )]
 
 %% plot final results
 %******* summary stats on reaching movements (Luke's original code)
@@ -484,9 +477,9 @@ legend([HAND PROP PURE],{'hand','prop nav','pure pursuit'})
 ylim([-1 0])
 xlim([-220 0])
 set(gca,'TickLength',[0 0])
-title('Range Vector / Range Vector Derivative Correlation');
+title('Fig 3G: Range Vector / Range Vector Derivative Correlation');
 ylabel('Correlation');
-xlabel('ms')
+xlabel('ms from reach end')
 
 
 %******* plot the mean velocities (direct and lateral) over reaches
@@ -529,11 +522,89 @@ legend([CRICK HAND PROP PURE],{'cricket','hand','prop nav','pure pursuit'})
 xlim([-220 0])
 ylim([-5 15])
 set(gca,'TickLength',[0 0])
-title('Mean Congruent Lateral Velocity');
-ylabel(' Lateral Vecity in same direction as Cricket Velocity cm/s');
+title('Fig 3H: Mean Congruent Lateral Velocity');
+ylabel('Lateral Vecity in same direction as Cricket Velocity cm/s');
 xlabel('ms from reach end')
 
 return;
+
+%%
+function [VHp2,VHo2,VHp1,VHo1,VCp1,VCo1,Dx1,Dy1,Dxy1,HD_t1,CD_t1] = kinematicAnalysisFutureZ_edit(Ph,Pc,qq)
+
+%   Ph: position of hand, [Xt,Yt], t = 1 : nT
+%   Pc: position of cricket, [Xt,Yt]
+
+% KH Wang 05252021 + LH Shaw edits
+
+% number of time points
+
+if qq==1
+
+nT = size(Ph,1);
+
+% kinematic vectors
+Dch = Pc-Ph; % target displacement
+Vh = diff(Ph,1); % hand velocity
+Vc = diff(Pc,1); % cricket velocity
+
+% vector magnitude _radius
+Vh_r = vecnorm(Vh,2,2); 
+Vc_r = vecnorm(Vc,2,2);
+
+% vector angles _theta
+Dch_t = atan2(Dch(:,2),Dch(:,1));
+Vh_t = atan2(Vh(:,2),Vh(:,1)); %velocity angle of hand
+Vc_t = atan2(Vc(:,2),Vc(:,1));
+
+% future velocity angle relative to current displacement vector
+HD_t2 = Vh_t(2:nT-1) - Dch_t(1:nT-2); 
+
+% past velocity angle relative to current displacement vector
+HD_t1 = Vh_t(1:nT-2) - Dch_t(1:nT-2);
+CD_t1 = Vc_t(1:nT-2) - Dch_t(1:nT-2);
+
+% output kinematic parameters
+% orthogonal projection of velocity vector to displacement vector
+VHo2 = sin(HD_t2).*Vh_r(2:nT-1); % future hand velocity %%
+VHo1 = sin(HD_t1).*Vh_r(1:nT-2); % past hand velocity
+VCo1 = sin(CD_t1).*Vc_r(1:nT-2); % past cricket velocity
+
+% parallel projection of velocity vector to displacement vector
+VHp2 = cos(HD_t2).*Vh_r(2:nT-1); % future hand velocity
+VHp1 = cos(HD_t1).*Vh_r(1:nT-2); % past hand velocity
+VCp1 = cos(CD_t1).*Vc_r(1:nT-2); % past cricket velocity
+
+% matched current displacement vector 
+Dx1 = Dch(1:nT-2,1);
+Dy1 = Dch(1:nT-2,2);
+Dxy1= hypot(Dx1,Dy1);
+
+elseif qq==2
+
+nT = size(Ph,1);
+
+% kinematic vectors
+Dch = Pc-Ph; % target displacement (note Ph is not time shifted here!)
+Vh = diff(Ph,1); % hand velocity
+Vc = diff(Pc,1); % cricket velocity
+
+% output kinematic parameters
+% orthogonal projection of velocity vector to displacement vector
+VHo2 = Vh(2:nT-1,1); % future hand velocity %%
+VHo1 = Vh(1:nT-2,1); % past hand velocity
+VCo1 = Vc(1:nT-2,1); % past cricket velocity
+
+% parallel projection of velocity vector to displacement vector
+VHp2 = Vh(2:nT-1,2); % future hand velocity
+VHp1 = Vh(1:nT-2,2); % past hand velocity
+VCp1 = Vc(1:nT-2,2); % past cricket velocity
+
+% matched current displacement vector 
+Dx1 = Dch(1:nT-2,1);
+Dy1 = Dch(1:nT-2,2);
+Dxy1= hypot(Dx1,Dy1);
+
+end
 
 
 %********* BELOW, TRYING TO INCORPORATE USING EXTENDED CRICK VELOCITIES 
@@ -668,112 +739,3 @@ function [simPos] = zfitPNP(birdPos,birdVel,birdSpeed,lurePos,lureVel,stepSize,t
   end
 
 return;
-
-
-%%****** OLDER CODE DID NOT ACCOUNT FOR NEGATIVE TIMES 
-
-% %Copyright. Graham K. Taylor & Caroline H. Brighton, University of Oxford, November 2018.
-% 
-% function [PPx,PPy,r2,N] = FindBestPNP(Hx,Hy,Cx,Cy,K,N,tau,lamb,minoff,taup)
-%       
-%       stepSize = 240;
-%       tauMax = max(tau,minoff);
-%       if (tauMax > (length(Hx)-1) )
-%           PPx = Hx;
-%           PPy = Hy;
-%           r2 = NaN;
-%           N = 0;
-%           return;
-%       end      
-%       birdPos = [Hx,Hy,zeros(size(Hx))];
-%       birdVel = [diff(Hx),diff(Hy),zeros(size(diff(Hx)))] * stepSize;
-%       birdVel = [birdVel(1,:) ; birdVel];
-%       birdSpeed = vecnorm(birdVel')';
-%       lurePos = [Cx,Cy,zeros(size(Cx))];
-%       lureVel = [diff(Cx),diff(Cy),zeros(size(diff(Cx)))] * stepSize;
-%       lureVel = [lureVel(1,:) ; lureVel];
-%       %****** call their routine
-%       if isnan(tau)
-%           input('what?');
-%       end
-%       simPos = zfitPNP(birdPos,birdVel,birdSpeed,lurePos,lureVel,stepSize,tauMax,K,N,tau,taup);
-%       %*******
-%       PPx = simPos(:,1);
-%       PPy = simPos(:,2);
-%       ex = tauMax:length(Hx);
-%       Ptot = sum( (Hx(ex)-mean(Hx(ex))) .^ 2) + sum( (Hy(ex)-mean(Hy(ex))) .^ 2 );
-%       Perr = sum( (Hx(ex) - PPx(ex)) .^ 2) + sum( (Hy(ex) - PPy(ex)) .^ 2);
-%       Vtot = sum( diff(Hx(ex)) .^ 2) + sum( diff(Hy(ex)) .^ 2);
-%       Verr = sum( (diff(Hx(ex)) - diff(PPx(ex))) .^ 2) + sum( (diff(Hy(ex)) - diff(PPy(ex))) .^ 2);    
-%       %*******
-%       N = (length(Hx)-tauMax);
-%       r2 = ((1-lamb)*((Ptot-Perr)/Ptot) + lamb * ((Vtot-Verr)/Vtot));   % weight position and vel R2
-%       %********
-% return
-% 
-% 
-% %Copyright. Graham K. Taylor & Caroline H. Brighton, University of Oxford, November 2018.
-% function [simPos] = zfitPNP(birdPos,birdVel,birdSpeed,lurePos,lureVel,stepSize,tauMax,K,N,tau,taup)
-% 
-%   %Initializes matrices for bird's simulated position and velocity
-%   simPos=birdPos*nan; simPos(1:tauMax,:)=birdPos(1:tauMax,:);
-%   simVel=birdVel*nan; % simVel(1:tauMax,:)=birdVel(1:tauMax,:);
-%   
-%   dN = size(lurePos,1) - size(birdPos,1);  % cricket trace is appended (sub dN to sync times)
-% 
-%   %*** rest to straight line for history up to TauMax (reduce noise)
-%   uvel = nanmean(birdVel(1:tauMax,:));
-%   for t = 1:tauMax
-%       simVel(t,:) = uvel;
-%   end
-%   %*********
-%   
-%   for t=tauMax+1:length(birdPos)
-%     
-%     %% Uses PP guidance law to compute bird's commanded acceleration at time step (t-1)
-%       
-%         %Calculates line-of-sight vector (r) lagged by tau
-%         % r=lurePos(t-tau,:)-simPos(t-tau,:);
-%         %**** Note, now r can be updated by future prediction "taup"
-%         r = ((taup * lureVel(t-tau+dN)) + lurePos(t-tau+dN,:)) - simPos(t-tau,:);
-%     
-%         %Defines velocity vector (v) lagged by tau
-%         v=simVel(t-tau,:);
-%     
-%         if (0)
-%           %Calculates deviation angle (delta) lagged by tau
-%           delta=acos(dot(r,v)/(norm(r)*norm(v)));
-%     
-%           %Creates unit vector normal to line of sight (r) and velocity (v)
-%           n=cross(r,v)/(norm(r)*norm(v)); n=n/norm(n); 
-%     
-%           %Calculates commanded acceleration under delayed PP guidance law
-%           birdAcc=-K*delta*cross(n,simVel(t-1,:));
-%      
-%         else
-%           % use direct 2D version of pure pursuit (not angle based steering)
-%           birdAcc = K * r * stepSize;
-%         end
-%         
-%         %% Uses PN guidance law to compute bird's commanded acceleration at time (t-1)
-%         %Calculates line-of-sight vector (r) lagged by tau
-% 
-%         %Calculates line-of-sight rate (lambdaDot) at time (t-delay)
-%         lambdaDot=cross(r, (lureVel(t-tau+dN,:)-simVel(t-tau,:)))/sum(r.^2);
-% 
-%         %Calculates commanded acceleration under delayed PN guidance law
-%         birdAcc2=N*cross(lambdaDot,simVel(t-1,:));
-%         
-%         %% Computes bird's velocity and position at time step t
-%         %Applies commanded acceleration to bird's simulated velocity
-%         simVel(t,:)=simVel(t-1,:) + (birdAcc+birdAcc2)/stepSize;
-%         
-%         %Adjusts simulated velocity of bird to match its measured speed
-%         simVel(t,:)=birdSpeed(t,:)*simVel(t,:)/norm(simVel(t,:));
-%         
-%         %Computes position of bird at time step t
-%         simPos(t,:)=simPos(t-1,:)+simVel(t,:)/stepSize;              
-%   end
-% 
-% return;
-% 

@@ -120,7 +120,7 @@ title('Figure 4E: Predictive Model');
 set(gca,'Fontsize',14);
 %******** make a special color map here
 colormap(cmap);
-colorbar;
+colorbar('Ticks',[200,250,300,350,400],'TickLabels',{'-200','-250','-300','-350','-400'}); %switch back to negative values
 %****** add horizontal axis of surface plot
 subplot('Position',[0.35 0.09 0.425 0.001]);
 axis([min(iX) max(iX) 0 1]);

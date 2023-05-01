@@ -485,6 +485,7 @@ end
        set(gca,'Xtick',[0:50:150]);
        set(gca,'Ytick',[-0.20:0.20:0.40]);
        set(gca,'Fontsize',14);
+       set(gcf,'color','white');
        axis tight;
        text(100,0.35,[num2str(nSEM) ' SEM'],'Fontsize',14);
        %*******

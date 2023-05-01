@@ -389,96 +389,7 @@ end
 %**** preliminary, make some fast plots *********
 DTAU = 80;
 tscal = (1000/240);
-if (0)
-    hf = figure;
-    set(hf,'Position',[100 100 1800 500]);
-    zmaxo = max(max(max(Keep.R2)));
-    % zmino = min(min(min(Keep.R2)));
-    zmino = 0.88;
-    dmino = 0.00;
-    for k = 1:6
-      subplot('Position',[(0.05+((k-1)*0.16)) 0.15 0.125 0.70]);
-      if (k < 4)
-         imo = squeeze(Keep.R2(:,:,k+1));
-         imagesc(Keep.VMset*tscal,Keep.TauPset,imo,[zmino zmaxo]); hold on;
-      else
-         if (k == 4)
-             imo = squeeze(Keep.R2(:,:,3)-Keep.R2(:,:,2));
-             imagesc(Keep.VMset*tscal,Keep.TauPset,imo,[dmino 0.07]); hold on;    
-         else
-            if (k == 5)
-              imo = squeeze(Keep.R2(:,:,3)-Keep.R2(:,:,4));
-              imagesc(Keep.VMset*tscal,Keep.TauPset,imo,[dmino max(max(imo))]); hold on;
-            else
-              imo = squeeze(Keep.R2(:,:,3)-Keep.R2(:,:,4));
-              simo = squeeze( 0.5*(Keep.SR2(:,:,3)+Keep.SR2(:,:,4)));
-              zimo = imo ./ simo;
-              imagesc(Keep.VMset*tscal,Keep.TauPset,zimo,[0 5]); hold on;       
-            end
-         end
-      end
-      %***** find the peak at 80 ms delay
-      vms = Keep.VMset*tscal;
-      disto = (Keep.VMset*tscal - DTAU).^2;
-      zm = find( disto == min(disto) );
-      vm = zm(1);
-      maxo = max(max(imo(:,vm)));
-      zz = find( imo == maxo);
-      a = 1+floor((zz(1)-1)/Keep.TauN);
-      b = mod((zz(1)-1),Keep.TauN)+1;
-      if (k >= 4)
-          a5 = a;
-          b5 = b;
-          disp('Peak fit taup and VM delay');
-          [Keep.TauPset(b),Keep.VMset(a)*tscal]
-      end
-      if (k == 5)  % do stats compare
-          bestPP2 = Keep.Best{b5,a5,3};  % errors per trial at peak
-          bestPN = Keep.Best{b5,a5,2};
-          zz = find(~isnan(bestPP2(:,1)));
-          % p1 = signrank(bestPP2(zz,1),bestPN(zz,1));  % PP2 vs PN model
-          [h1,p1] = ttest(bestPP2(zz,1),bestPN(zz,1));
-          disp('Sig dif PP2 vs PN?');
-          [(sum( bestPP2(zz,1) .* bestPP2(zz,2))/sum(bestPP2(zz,2))),...
-           (sum( bestPN(zz,1) .* bestPN(zz,2))/sum(bestPN(zz,2)))]
-          p1
 
-          %*******
-          bestPP2 = Keep.Best{b5,a5,3};  % errors per trial at peak
-          bestPN2 = Keep.Best{b5,a5,4};
-          [b5,a5]
-          if ~isempty(bestPN2)
-            zz = find(~isnan(bestPN2(:,1)));
-            % p2 = signrank(bestPP2(zz,1),bestPN2(zz,1));  % PP2 vs PN model
-            [h2,p2] = ttest(bestPP2(zz,1),bestPN2(zz,1));
-            disp('Sig dif PP2 vs PN2?');
-            [(sum( bestPP2(zz,1) .* bestPP2(zz,2))/sum(bestPP2(zz,2))),...
-             (sum( bestPN2(zz,1) .* bestPN2(zz,2))/sum(bestPN2(zz,2)))]
-            p2
-          end
-
-      end
-      plot(Keep.VMset(a)*tscal,Keep.TauPset(b),'k+');
-      %*******
-      colorbar;
-      xlabel('VM delay');
-      ylabel('taup ');
-      switch k
-          case 1  
-              title('PN err');
-          case 2
-              title('Pred err');
-          case 3
-              title('Mix err');
-          case 4
-              title('Pred - PN');
-          case 5 
-              title('Pred - Mix');
-          case 6
-              title('Zscore (Pred-Mix)');
-       end
-    end
-end
 %**** look at difference maps
 
 
@@ -545,6 +456,7 @@ if (1)
     ylabel('Goodness of Fit (R^2)');
     set(gca,'Fontsize',14);
     axis([4 160 0.78 1.02]);
+    set(gcf,'color','white');
     title('Figure 3I: pursuit simulation fit over delay')
  end
 
@@ -639,11 +551,12 @@ if (1)
       zz = find(~isnan(bestPP2(:,1)));
       psign = signrank(bestPP2(zz,1),bestPN2(zz,1));  % PP2 vs PN model
       [h1,pttest] = ttest(bestPP2(zz,1),bestPN2(zz,1));
-      disp(sprintf('Sig dif at %d: Predictive - Mixed',Keep.VMset(a)*tscal));
-      [(sum( bestPP2(zz,1) .* bestPP2(zz,2))/sum(bestPP2(zz,2))),...
-       (sum( bestPN2(zz,1) .* bestPN2(zz,2))/sum(bestPN2(zz,2)))]
-      psign
-      pttest
+%       disp(sprintf('Sig dif at %d: Predictive - Mixed',Keep.VMset(a)*tscal));
+%       [(sum( bestPP2(zz,1) .* bestPP2(zz,2))/sum(bestPP2(zz,2))),...
+%        (sum( bestPN2(zz,1) .* bestPN2(zz,2))/sum(bestPN2(zz,2)))]
+%       psign
+%       pttest
+      set(gcf,'color','white');
       title(sprintf('Fig 4F: Signtest(p=%6.4f)  t-test(p=%6.4f)',psign,pttest),'Fontsize',12);
     end
  end

@@ -111,16 +111,16 @@ for i = 1:size(work.x.hand,2)
 
     Kix{i}=interp1(x',work.x.fingerk{i}(1:end-1,:),P,'linear','extrap');
     Kiy{i}=interp1(x',work.y.fingerk{i}(1:end-1,:),P,'linear','extrap');
-    if find(all(isnan(work.x.fingert{i}),1)==1)
+   % if find(all(isnan(work.x.fingert{i}),1)==1)
         nanfind=all(isnan(work.x.fingert{i}),1);
         Tix{i}=NaN(nq,5);
         Tiy{i}=NaN(nq,5);
         Tix{i}(:,nanfind==0)=interp1(x',work.x.fingert{i}(1:end-1,nanfind==0),P,'pchip','extrap');
         Tiy{i}(:,nanfind==0)=interp1(x',work.y.fingert{i}(1:end-1,nanfind==0),P,'pchip','extrap');
-    else
-        Tix{i}=interp1(x',work.x.fingert{i}(1:end-1,:),P,'pchip','extrap');
-        Tiy{i}=interp1(x',work.y.fingert{i}(1:end-1,:),P,'pchip','extrap');
-    end
+%     else
+%         Tix{i}=interp1(x',work.x.fingert{i}(1:end-1,:),P,'pchip','extrap');
+%         Tiy{i}=interp1(x',work.y.fingert{i}(1:end-1,:),P,'pchip','extrap');
+%     end
     Hix{i}=interp1(x',work.x.hand{i}(1:end-1,:),P,'linear','extrap');
     Hiy{i}=interp1(x',work.y.hand{i}(1:end-1,:),P,'linear','extrap');
     Fix{i}=interp1(x',work.x.food{i}(1:end-1,:),P,'linear');
@@ -155,7 +155,6 @@ sVI=nanstd(VI)/sqrt(N);
 
 
 %% Cluster Z score knuckles or tips
-
 
 if mdwtorkmean==1
     cluster=mdwtcluster(FKz,'maxclust',MC);

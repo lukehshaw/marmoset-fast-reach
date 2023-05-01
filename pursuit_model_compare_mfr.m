@@ -409,6 +409,7 @@ end
 
 %***
 figure
+set(gcf,'color','white');
 for i = 1:nReach
     tmp = vecCorA{i};
     nFrame = length(tmp);
@@ -484,6 +485,7 @@ xlabel('ms from reach end')
 
 %******* plot the mean velocities (direct and lateral) over reaches
 figure;
+set(gcf,'color','white');
 xx = ((-vcSize+2):0)/.240;
 plot(xx,zeros(size(xx)),'k--'); hold on;
 uuc = nanmean(vcAC,1);
@@ -607,7 +609,7 @@ Dxy1= hypot(Dx1,Dy1);
 end
 
 
-%********* BELOW, TRYING TO INCORPORATE USING EXTENDED CRICK VELOCITIES 
+%% ********* BELOW, TRYING TO INCORPORATE USING EXTENDED CRICK VELOCITIES 
 %Copyright. Graham K. Taylor & Caroline H. Brighton, University of Oxford, November 2018.
 function [PPx,PPy,r2,N] = FindBestPNP(Hx,Hy,Cx,Cy,K,N,tau,lamb,minoff,taup)
       

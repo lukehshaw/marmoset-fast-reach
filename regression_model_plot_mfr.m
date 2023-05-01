@@ -62,8 +62,11 @@ end
 AIC_base_std = squeeze( std(AICjakbase) ) * sqrt(JackN-1);
 AIC_pred_std = squeeze( std(AICjakpred) ) * sqrt(JackN-1);
 AIC_diff_std = squeeze( std(AICjakdiff) ) * sqrt(JackN-1);
-AICstd = AIC_diff_std;
-%AICstd = 0.5*sqrt(AIC_diff_std.^2+AIC_pred_std.^2); %pooled(ish)
+%AICstd = AIC_diff_std;
+AICstd = 0.5*sqrt(AIC_diff_std.^2+AIC_pred_std.^2); 
+%This choice of error bound estimation lies between the best motivated and
+%lowest std (model difference) and an over-estimate of std from the
+%prediction model alone
 
 %********* colormap to emphasize trough
 cmap = viridis(101);
@@ -89,6 +92,7 @@ VMDstd = AIC_base_std(:,yp)';
 %*********
 
 hf = figure;
+set(gcf,'color','white');
 set(hf,'Position',[100 100 800 800]);
 subplot('Position',[0.35 0.10 0.5 0.8]);
 diffX = 0.5*median(diff(iX));

@@ -134,10 +134,11 @@ end
 
 
 N=size(VHoa,2);
-figure
 
+figure
+set(gcf,'color','white');
 hold on
-sgtitle(['Fig 3C: ' tordname ' Interp: Hand and Cricket Speed']);
+title(['Fig 3C: ' tordname ' Interp: Hand and Cricket Speed']);
 xp=(1:nq)';
 mP = nanmean(abs(VHoa),2)*240;
 sP = nanstd(abs(VHoa)*240,[],2)/sqrt(N);%./sqrt(sum(~isnan(abs(VHoa)*240),2));
